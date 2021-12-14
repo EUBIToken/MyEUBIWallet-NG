@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<title>MyEUBIWallet v2.1: Ultimate bEUBI web wallet</title>
+	</head>
+	<body style="background-image: url('https://media.istockphoto.com/photos/coins-of-various-cryptocurrencies-picture-id1034363382?k=20&m=1034363382&s=612x612&w=0&h=sCpRmOSicsJJS73_iNQh16nqeBgFKqU3jjfC4u42D_k=');background-repeat: no-repeat;background-attachment: fixed;background-size: cover;">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css" integrity="sha512-t38vG/f94E72wz6pCsuuhcOPJlHKwPy+PY+n1+tJFzdte3hsIgYE7iEpgg/StngunGszVMrRfvwZinrza0vMTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<script src="thirdparty.js"></script>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		<nav class="blue accent-4 hide-on-med-and-down">
+			<div class="nav-wrapper">
+				<h6 class="brand-logo left">MyEUBIWallet v2.1: Ultimate bEUBI web wallet</h6>
+			</div>
+		</nav>
+		<nav class="blue accent-4 hide-on-large-only">
+			<div class="nav-wrapper">
+				<h6 class="brand-logo center">MyEUBIWallet v2.1</h6>
+			</div>
+		</nav>
+		<br/>
+		<div class="blue-grey lighten-5 container row" id="beforeWalletLoad">
+			<h6>Welcome to MyEUBIWallet v2.1! How would you want to load your wallet?</h6>
+			<ul class="collapsible">
+				<li>
+					<div class="collapsible-header">
+						<h6>Load wallet from browser storage</h6>
+					</div>
+					<div class="collapsible-body row">
+						<form id="listofwallets2">
+							
+						</form>
+						<div class="input-field col s12 row">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="pass3" type="password"/>
+							<label for="pass3">Wallet encryption password</label>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="quickLoadWallet"><i class="material-icons left">account_balance</i>Load Wallet</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6 red" id="quickDeleteWallet2"><i class="material-icons left">clear</i>Delete wallet</button>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">create</i>
+							<input id="storedWalletName2" type="text"/>
+							<label for="storedWalletName2">Give the wallet a name</label>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="quickRenameWallet"><i class="material-icons left">create</i>Rename wallet</button>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header">
+						<h6>Load wallet from private key</h6>
+					</div>
+					<div class="collapsible-body row">
+						<form id="listofwallets">
+							
+						</form>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="privateKey" type="text"/>
+							<label for="privateKey">Private key</label>
+							<div class="col s12"></div>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="keyloader"><i class="material-icons left">account_balance</i>Load Wallet from key</button>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header">
+						<h6>I don't have a wallet</h6>
+					</div>
+					<div class="collapsible-body row">
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="createWalletButton"><i class="material-icons left">add</i>Create wallet</button>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="walletAddress" type="text"/>
+							<label for="walletAddress">Wallet address</label>
+							<div class="col s12"></div>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="loadViewOnly"><i class="material-icons left">account_balance</i>Load view-only wallet</button>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="blue-grey lighten-5 container" id="afterWalletLoad" style="display: none;">
+			<h6>Welcome to your bEUBI web wallet!</h6>
+			<ul class="collapsible">
+				<li class="hideInReadOnly">
+					<div class="collapsible-header">
+						<h6>Send bEUBI tokens</h6>
+					</div>
+					<div class="collapsible-body row">
+						<div class="input-field col s12" id="hideApprovalOwner" style="display: none;">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="approvalOwner" type="text"/>
+							<label for="approvalOwner">Owner's address</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="sendto" type="text"/>
+							<label for="sendto">Receiver's address</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">attach_money</i>
+							<input id="eubiamount" type="text"/>
+							<label for="eubiamount">Amount</label>
+						</div>
+						<label class="col s12">
+							<input type="checkbox" id="useApprovalCheckbox"/>
+							<span style="color: black;">
+								<h6>Spend using approval</h6>
+							</span>
+						</label>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="sendEubiButton"><i class="material-icons left">send</i>Send</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="approveEubiButton"><i class="material-icons left">check</i>Set approval</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6"><i class="material-icons left">search</i>Query approval</button>
+					</div>
+				</li>
+				<li class="hideInReadOnly">
+					<div class="collapsible-header">
+						<h6>Send BNB</h6>
+					</div>
+					<div class="collapsible-body row">
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="sendtoNative" type="text"/>
+							<label for="sendtoNative">Receiver's address</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">attach_money</i>
+							<input id="NativeAmount" type="text"/>
+							<label for="NativeAmount">Amount</label>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="sendNativeButton"><i class="material-icons left">send</i>Send</button>
+						<div class="col s12">
+							<h6 id="sendNativeMessage"></h6>
+						</div>
+						<div class="col s12 m12 l6 progress" id="sendNativePreloader" style="visibility: hidden;">
+							<div class="indeterminate"></div>
+						</div>
+					</div>
+				</li>
+				<li id="BrowserStoredWallet" class="hideInReadOnly">
+					<div class="collapsible-header">
+						<h6>Browser-stored wallet</h6>
+					</div>
+					<div class="collapsible-body row">
+						<h6>Storing the wallet in the browser can make MyEUBIWallet more convenient to use. Do not rely on browser storage as the sole mean of storing your private key, and always backup your private key somewhere else.</h6>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="pass1" type="password"/>
+							<label for="pass1">Enter wallet encryption password</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">vpn_key</i>
+							<input id="pass2" type="password"/>
+							<label for="pass2">Confirm wallet encryption password</label>
+						</div>
+						<div class="input-field col s12">
+							<i class="material-icons prefix">create</i>
+							<input id="storedWalletName" type="text"/>
+							<label for="storedWalletName">Give the wallet a name</label>
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="AddQuickWalletAccess"><i class="material-icons left">lock</i>Encrypt and store</button>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header">
+						<h6>Wallet details</h6>
+					</div>
+					<div class="collapsible-body row">
+						<h6 id="myWalletAddress"></h6>
+						<h6 id="eubiBalance">Fetching bEUBI balance...</h6>
+						<h6 id="prssBalance">Fetching bPRSS balance...</h6>
+						<h6 id="nativeBalance">Fetching BNB balance...</h6>
+						<h6>You need approximately 0.00019 BNB to pay for gas costs for a token transfer.</h6>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="reloadWalletButton"><i class="material-icons left">refresh</i>Reload wallet</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6 hideInReadOnly" id="epkb"><i class="material-icons left">content_copy</i>Copy private key</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="copyAddressButton"><i class="material-icons left">content_copy</i>Copy wallet address</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6 red" id="unloadWalletButton"><i class="material-icons left">clear</i>Unload wallet</button>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header">
+						<h6>BNB Transfer history</h6>
+					</div>
+					<div class="collapsible-body row">
+						<div class="col s12" id='transactionHistory'>
+							
+						</div>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="previousTransactionHistoryButton"><i class="material-icons left">skip_previous</i>previous</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="nextTransactionHistoryButton"><i class="material-icons left">skip_next</i>next</button>
+					</div>
+				</li>
+				<li id="PancakeSwap" class="hideInReadOnly">
+					<div class="collapsible-header">
+						<h6>PancakeSwap</h6>
+					</div>
+					<div class="collapsible-body row">
+						<h6 id='EUBI2BNBLiquidityBalance'>Fetching BNB-bEUBI Liquidity balance...</h6>
+						<div class="row">
+							<div class="col s12">
+								<ul class="tabs row tabs-fixed-width">
+									<li class="tab"><a class="active" href="#pancake_ex">Swap tokens</a></li>
+									<li class="tab"><a class="active" href="#pancake_liquidity">Add Liquidity</a></li>
+									<li class="tab"><a class="active" href="#pancake_appr">Spending approvals</a></li>
+									<li class="tab"><a class="active" href="#liquidity_incentive">Liquidity incentives</a></li>
+								</ul>
+							</div>
+						</div>
+						<div id='pancake_ex'>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">attach_money</i>
+								<input id="PancakeAmount" type="text"/>
+								<label for="PancakeAmount">Amount</label>
+							</div>
+							<form>
+								<p>
+									<label>
+										<input name="group1" type="radio" checked/>
+										<span style="color: black;">BNB => bEUBI</span></span>
+									</label>
+								</p>
+								<p>
+									<label>
+										<input id="sellEUBIButton" name="group1" type="radio"/>
+										<span style="color: black;">bEUBI => BNB</span></span>
+									</label>
+								</p>
+								<p>
+									<label>
+										<input id="EUBI2PRSS" name="group1" type="radio"/>
+										<span style="color: black;">bEUBI => bPRSS</span></span>
+									</label>
+								</p>
+								<p>
+									<label>
+										<input id="PRSS2EUBI" name="group1" type="radio"/>
+										<span style="color: black;">bPRSS => bEUBI</span></span>
+									</label>
+								</p>
+							</form>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="PancakeButton"><i class="material-icons left">attach_money</i>Trade</button>
+						</div>
+						<div id='pancake_appr'>
+							<h6>You need to approve tokens before you can use them with PancakeSwap for the first time from any wallets.</h6>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="PancakeApproveEUBIButton"><i class="material-icons left">check</i>Approve bEUBI tokens</button>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="PancakeApprovePRSSButton"><i class="material-icons left">check</i>Approve bPRSS tokens</button>
+						</div>
+						<div id='pancake_liquidity'>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">attach_money</i>
+								<input id="LiquidityToken0" type="text"/>
+								<label for="LiquidityToken0">First token amount</label>
+							</div>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">attach_money</i>
+								<input id="LiquidityToken1" type="text"/>
+								<label for="LiquidityToken1">Second token amount</label>
+							</div>
+							<form>
+								<p>
+									<label>
+										<input id="BNB2EUBIPool" name="group1" type="radio" checked/>
+										<span style="color: black;">BNB - bEUBI</span></span>
+									</label>
+								</p>
+								<p>
+									<label>
+										<input id="PRSS2EUBIPool" name="group1" type="radio"/>
+										<span style="color: black;">bPRSS - bEUBI</span></span>
+									</label>
+								</p>
+							</form>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="addPancakeLiquidityButton"><i class="material-icons left">attach_money</i>Add liquidity</button>
+						</div>
+						<div id='liquidity_incentive'>
+							<h6>We used a liquidity buyback incentive model, where you can permanently lock BNB-bEUBI liquidity tokens now, in exchange for heavily discounted bEUBI tokens in the future. The discount is 0.2%/day from the time you burn your liquidity to the time you claim the bEUBI.</h6>
+							<div class="input-field col s12">
+								<i class="material-icons prefix">attach_money</i>
+								<input id="LiquidityToken2" type="text"/>
+								<label for="LiquidityToken2">Liquidity token amount</label>
+							</div>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="ApproveRaceTrackLiquidityButton"><i class="material-icons left">check</i>Approve liquidity</button>
+							<button class="waves-effect waves-light btn col s12 m12 l6 red" id="RaceTrackLiquidityButton"><i class="material-icons left">clear</i>Burn liquidity</button>
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="stopRaceTrackButton"><i class="material-icons left">attach_money</i>Claim discounted bEUBI</button>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="collapsible-header">
+						<h6>About MyEUBIWallet</h6>
+					</div>
+					<div class="collapsible-body row">
+						<h6>MyEUBIWallet is made by the blockchain director of EUBI, Jessie Lesbian</h6>
+						<h6>Email: jessielesbian@eubitoken.com</h6>
+						<h6>Reddit: <a href="https://www.reddit.com/u/jessielesbian">u/jessielesbian</a></h6>
+						<h6>Website: <a href="https://www.eubitoken.com/">www.eubitoken.com</a></h6>
+						<h6>MyEUBIWallet is still experimental software, use with care!</h6>
+						<br/>
+						<h6>Transaction history viewer made possible by bscscan API, and blockchain connection provided by Moralis speedy node.</h6>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="WalletDeletedModal" class="modal">
+			<div class="modal-content">
+				<h6>Wallet successfully deleted!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="WalletRenamedModal" class="modal">
+			<div class="modal-content">
+				<h6>Wallet successfully renamed!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="DecryptionErrorModal" class="modal">
+			<div class="modal-content">
+				<h6>Unable to decrypt wallet!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="WalletSavedModal" class="modal">
+			<div class="modal-content">
+				<h6>Wallet encrypted and saved!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="MismatchingPasswordModal" class="modal">
+			<div class="modal-content">
+				<h6>The 2 passwords doesn't match!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="InvalidKeyModal" class="modal">
+			<div class="modal-content">
+				<h6>Invalid private key given!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="SendEUBIModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to send bEUBI?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="NativeSendModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to send BNB?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="deleteWalletModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to delete this wallet?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green" id="quickDeleteWallet">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="PancakeModal" class="modal">
+			<div class="modal-content">
+				<h6 id="PancakeMessage"></h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="PancakeApproveEUBIModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to approve bEUBI tokens for use with PancakeSwap?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="PancakeApprovePRSSModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to approve bPRSS tokens for use with PancakeSwap?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="PancakeAddLiquidityModal" class="modal">
+			<div class="modal-content">
+				<h6>Are you sure you want to add liquidity to PancakeSwap?</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
+			</div>
+		</div>
+		<div id="InvalidAddressModal" class="modal">
+			<div class="modal-content">
+				<h6>Invalid address!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<script src="scripts.js"></script>
+	</body>
+</html>
