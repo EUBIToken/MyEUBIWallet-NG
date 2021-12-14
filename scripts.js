@@ -4,7 +4,7 @@
 	M.AutoInit();
 
 	//begin auto-generated modal bindings
-	const WalletDeletedModalInstance = M.Modal.getInstance(WalletDeletedModal),WalletRenamedModalInstance = M.Modal.getInstance(WalletRenamedModal),DecryptionErrorModalInstance = M.Modal.getInstance(DecryptionErrorModal),WalletSavedModalInstance = M.Modal.getInstance(WalletSavedModal),MismatchingPasswordModalInstance = M.Modal.getInstance(MismatchingPasswordModal),InvalidKeyModalInstance = M.Modal.getInstance(InvalidKeyModal),SendEUBIModalInstance = M.Modal.getInstance(SendEUBIModal),NativeSendModalInstance = M.Modal.getInstance(NativeSendModal),deleteWalletModalInstance = M.Modal.getInstance(deleteWalletModal),PancakeModalInstance = M.Modal.getInstance(PancakeModal),PancakeApproveEUBIModalInstance = M.Modal.getInstance(PancakeApproveEUBIModal),PancakeApprovePRSSModalInstance = M.Modal.getInstance(PancakeApprovePRSSModal),PancakeAddLiquidityModalInstance = M.Modal.getInstance(PancakeAddLiquidityModal),InvalidAddressModalInstance = M.Modal.getInstance(InvalidAddressModal);
+	const InvalidAmountModalInstance = M.Modal.getInstance(InvalidAmountModal),SendFailModalInstance = M.Modal.getInstance(SendFailModal),SentModalInstance = M.Modal.getInstance(SentModal),SignFailModalInstance = M.Modal.getInstance(SignFailModal),WalletDeletedModalInstance = M.Modal.getInstance(WalletDeletedModal),WalletRenamedModalInstance = M.Modal.getInstance(WalletRenamedModal),DecryptionErrorModalInstance = M.Modal.getInstance(DecryptionErrorModal),WalletSavedModalInstance = M.Modal.getInstance(WalletSavedModal),MismatchingPasswordModalInstance = M.Modal.getInstance(MismatchingPasswordModal),InvalidKeyModalInstance = M.Modal.getInstance(InvalidKeyModal),SendEUBIModalInstance = M.Modal.getInstance(SendEUBIModal),NativeSendModalInstance = M.Modal.getInstance(NativeSendModal),deleteWalletModalInstance = M.Modal.getInstance(deleteWalletModal),PancakeModalInstance = M.Modal.getInstance(PancakeModal),PancakeApproveEUBIModalInstance = M.Modal.getInstance(PancakeApproveEUBIModal),PancakeApprovePRSSModalInstance = M.Modal.getInstance(PancakeApprovePRSSModal),PancakeAddLiquidityModalInstance = M.Modal.getInstance(PancakeAddLiquidityModal),InvalidAddressModalInstance = M.Modal.getInstance(InvalidAddressModal);
 	//end auto-generated modal bindings
 
 	//XSS Protector
@@ -71,6 +71,7 @@
 	};
 	
 	//Account Manager
+	let address = undefined;
 	const reloadWallet = async function(){
 		//Reset fields
 		eubiBalance.innerHTML = 'Fetching bEUBI balance...';
@@ -121,7 +122,7 @@
 		
 		
 	};
-	let address = undefined;
+	let tempSignAndSendTransaction = undefined;
 	{
 		let AccountManager = undefined;
 		const loadAccountManager = async function(account){
@@ -248,7 +249,87 @@
 			//Initially load quick wallet access
 			reloadQuickWalletAccess();
 		}
-	}	
+		
+		//Last function of the day
+		tempSignAndSendTransaction = async function(transaction){
+			transaction.chainId = '56';
+			transaction.from = address;
+			transaction.gas = '21000';
+			let ix = 0;
+			const batch = new BlockchainManager.BatchRequest();
+			const quicksend = function(){
+				if(ix++ == 2){
+					transaction.from = undefined;
+					//Despite this being "unfailable", we still need failure checks
+					//Since it's a cybersecurity best practice
+					console.log(transaction);
+					AccountManager.signTransaction(transaction).then(function(value){
+						BlockchainManager.sendSignedTransaction(value.rawTransaction).then(function(pass){
+							SentModalInstance.open();
+							reloadWallet();
+						}, function(){
+							SendFailModal.open();
+							reloadWallet();
+						});
+					}, function(fail){
+						SignFailModalInstance.open();
+					});
+				}
+			};
+			batch.add(BlockchainManager.estimateGas.request(transaction, async function(fail, pass){
+				if(pass){
+					transaction.gas = pass.toString();
+				}
+				quicksend();
+			}));
+			batch.add(BlockchainManager.getGasPrice.request(async function(fail, pass){
+				if(pass){
+					transaction.gasPrice = pass;
+					quicksend();
+				} else{
+					SignFailModalInstance.open();
+				}
+			}));
+			batch.add(BlockchainManager.getTransactionCount.request(address, async function(fail, pass){
+				if(pass){
+					transaction.nonce = pass;
+					quicksend();
+				} else{
+					SignFailModalInstance.open();
+				}
+			}));
+			batch.execute();
+		};
+	}
+	
+	//Service Manager
+	{
+		const signAndSendTransaction = tempSignAndSendTransaction;
+		//Send BNB
+		sendNativeButton2.onclick = function(){
+			let transaction = {};
+			try{
+				transaction.value = Web3.utils.toWei(NativeAmount.value);
+			} catch{
+				InvalidAmountModalInstance.open();
+				return;
+			}
+			const adr2 = sendtoNative.value;
+			if(Web3.utils.isAddress(adr2)){
+				transaction.to = adr2;
+				signAndSendTransaction(transaction);
+			} else{
+				InvalidAddressModalInstance.open();
+			}
+		};
+		sendNativeButton.onclick = function(){
+			NativeSendModalInstance.open();
+		};
+	}
+	
+	//dereference temporary send function
+	tempSignAndSendTransaction = undefined;
+	
 	//miscy
 	const toggle = async function (className, displayState){
 		var elements = document.getElementsByClassName(className)

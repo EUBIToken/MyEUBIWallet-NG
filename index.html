@@ -129,12 +129,6 @@
 							<label for="NativeAmount">Amount</label>
 						</div>
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="sendNativeButton"><i class="material-icons left">send</i>Send</button>
-						<div class="col s12">
-							<h6 id="sendNativeMessage"></h6>
-						</div>
-						<div class="col s12 m12 l6 progress" id="sendNativePreloader" style="visibility: hidden;">
-							<div class="indeterminate"></div>
-						</div>
 					</div>
 				</li>
 				<li id="BrowserStoredWallet" class="hideInReadOnly">
@@ -295,10 +289,42 @@
 						<h6>Website: <a href="https://www.eubitoken.com/">www.eubitoken.com</a></h6>
 						<h6>MyEUBIWallet is still experimental software, use with care!</h6>
 						<br/>
-						<h6>Transaction history viewer made possible by bscscan API, and blockchain connection provided by Moralis speedy node.</h6>
+						<h6>Made extremely possible by Materialize, web3.js, bscscan API, and Moralis speedy nodes.</h6>
 					</div>
 				</li>
 			</ul>
+		</div>
+		<div id="InvalidAmountModal" class="modal">
+			<div class="modal-content">
+				<h6>Invalid amount!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="SendFailModal" class="modal">
+			<div class="modal-content">
+				<h6>Unable to send transaction!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="SentModal" class="modal">
+			<div class="modal-content">
+				<h6>Transaction successfully sent!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
+		</div>
+		<div id="SignFailModal" class="modal">
+			<div class="modal-content">
+				<h6>Unable to sign transaction!</h6>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Ok</a>
+			</div>
 		</div>
 		<div id="WalletDeletedModal" class="modal">
 			<div class="modal-content">
@@ -362,7 +388,7 @@
 				<h6>Are you sure you want to send BNB?</h6>
 			</div>
 			<div class="modal-footer">
-				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green" id="sendNativeButton2">Yes</a>
 				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
 			</div>
 		</div>
