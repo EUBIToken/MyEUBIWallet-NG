@@ -22,7 +22,7 @@
 	};
 	
 	//Blockchain Manager
-	const BlockchainManager = new Web3.modules.Eth('wss://speedy-nodes-nyc.moralis.io/41590f438df3f8018a1e84b1/bsc/mainnet/ws');
+	const BlockchainManager = new Web3.modules.Eth('https://speedy-nodes-nyc.moralis.io/41590f438df3f8018a1e84b1/bsc/mainnet');
 	
 	//Token managers
 	let erc20 = [{"inputs": [{"internalType": "address","name": "owner","type": "address"},{"internalType": "address","name": "spender","type": "address"}],"name": "allowance","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "spender","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "approve","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "account","type": "address"}],"name": "balanceOf","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "recipient","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "transfer","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "sender","type": "address"},{"internalType": "address","name": "recipient","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "transferFrom","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"}];
@@ -131,6 +131,7 @@
 			beforeWalletLoad.style.display = 'none';
 			toggle('hideInReadOnly', 'list-item');
 			afterWalletLoad.style.display = 'block';
+			walletAddress2.innerHTML = escapeHtml(account.address);
 			reloadWallet();
 		};
 		const unloadAccountManager = async function(){
@@ -143,11 +144,6 @@
 			loadAccountManager(BlockchainManager.accounts.create());
 		};
 		unloadWalletButton.onclick = unloadAccountManager;
-		
-		//Export private key
-		epkb.onclick = function(){
-			navigator.clipboard.writeText(AccountManager.privateKey);
-		};
 		
 		//Import private key
 		keyloader.onclick = function(){
@@ -246,6 +242,25 @@
 				deleteWalletModalInstance.open();
 			};
 			
+			//Wallet exporter
+			quickExportWallet.onclick = async function() {
+				for(let i = 0; i < QuickWalletAccess.length; i++){
+					if(document.getElementById('quickWalletSelectorButton' + i.toString())?.checked){
+						const exportingWallet = {};
+						Object.assign(exportingWallet, QuickWalletAccess[i]);
+						exportingWallet.name = undefined;
+						const element = document.createElement('a');
+						element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportingWallet)));
+						element.setAttribute('download', 'keystore.json');
+						element.style.display = 'none';
+						document.body.appendChild(element);
+						element.click();
+						document.body.removeChild(element);
+						console.log(QuickWalletAccess[i]);
+					}
+				}
+			};
+			
 			//Initially load quick wallet access
 			reloadQuickWalletAccess();
 		}
@@ -254,7 +269,7 @@
 		tempSignAndSendTransaction = async function(transaction){
 			transaction.chainId = '56';
 			transaction.from = address;
-			transaction.gas = '21000';
+			transaction;
 			let ix = 0;
 			const batch = new BlockchainManager.BatchRequest();
 			const quicksend = function(){
@@ -262,7 +277,6 @@
 					transaction.from = undefined;
 					//Despite this being "unfailable", we still need failure checks
 					//Since it's a cybersecurity best practice
-					console.log(transaction);
 					AccountManager.signTransaction(transaction).then(function(value){
 						BlockchainManager.sendSignedTransaction(value.rawTransaction).then(function(pass){
 							SentModalInstance.open();
@@ -279,6 +293,8 @@
 			batch.add(BlockchainManager.estimateGas.request(transaction, async function(fail, pass){
 				if(pass){
 					transaction.gas = pass.toString();
+				} else{
+					transaction.gas = '21000';
 				}
 				quicksend();
 			}));
@@ -305,18 +321,28 @@
 	//Service Manager
 	{
 		const signAndSendTransaction = tempSignAndSendTransaction;
-		//Send BNB
+		//Cryptocurrency sending
 		sendNativeButton2.onclick = function(){
 			let transaction = {};
+			let value;
 			try{
-				transaction.value = Web3.utils.toWei(NativeAmount.value);
+				value = Web3.utils.toWei(NativeAmount.value);
 			} catch{
 				InvalidAmountModalInstance.open();
 				return;
 			}
 			const adr2 = sendtoNative.value;
 			if(Web3.utils.isAddress(adr2)){
-				transaction.to = adr2;
+				let contract_addr = sendingCryptoSelector.value;
+				if(contract_addr == 'bnb'){
+					//Sending BNB
+					transaction.to = adr2;
+					transaction.value = value;
+				} else{
+					//Sending tokens
+					transaction.to = contract_addr;
+					transaction.data = bEUBI.methods.transfer(adr2, value).encodeABI();
+				}
 				signAndSendTransaction(transaction);
 			} else{
 				InvalidAddressModalInstance.open();

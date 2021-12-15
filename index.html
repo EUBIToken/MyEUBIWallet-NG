@@ -42,10 +42,11 @@
 						<button class="waves-effect waves-light btn col s12 m12 l6 red" id="quickDeleteWallet2"><i class="material-icons left">clear</i>Delete wallet</button>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">create</i>
-							<input id="storedWalletName2" type="text"/>
+							<input id="storedWalletName2" type="text" autocomplete="no"/>
 							<label for="storedWalletName2">Give the wallet a name</label>
 						</div>
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="quickRenameWallet"><i class="material-icons left">create</i>Rename wallet</button>
+						<button class="waves-effect waves-light btn col s12 m12 l6" id="quickExportWallet"><i class="material-icons left">download</i>Export wallet keystore</button>
 					</div>
 				</li>
 				<li>
@@ -58,7 +59,7 @@
 						</form>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">vpn_key</i>
-							<input id="privateKey" type="text"/>
+							<input id="privateKey" type="text" autocomplete="no"/>
 							<label for="privateKey">Private key</label>
 							<div class="col s12"></div>
 						</div>
@@ -73,7 +74,7 @@
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="createWalletButton"><i class="material-icons left">add</i>Create wallet</button>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">vpn_key</i>
-							<input id="walletAddress" type="text"/>
+							<input id="walletAddress" type="text" autocomplete="no"/>
 							<label for="walletAddress">Wallet address</label>
 							<div class="col s12"></div>
 						</div>
@@ -83,55 +84,56 @@
 			</ul>
 		</div>
 		<div class="blue-grey lighten-5 container" id="afterWalletLoad" style="display: none;">
-			<h6>Welcome to your bEUBI web wallet!</h6>
+			<div style='width: 100%'>
+				<br/>
+			</div>
+			<div class='row'>
+				<div style='display: inline-block' class='col s12 m12 l6'>
+					<h6>Your balances:</h6>
+					<h6 id="eubiBalance">Fetching bEUBI balance...</h6>
+					<h6 id="prssBalance">Fetching bPRSS balance...</h6>
+					<h6 id="nativeBalance">Fetching BNB balance...</h6>
+				</div>
+				<div style='display: inline-block' class='col s12 m12 l6 right'>
+					<h6 id="walletAddress2" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap"></h6>
+					<button class="waves-effect waves-light btn col s12" id="reloadWalletButton"><i class="material-icons left">refresh</i>Reload wallet</button>
+					<button class="waves-effect waves-light btn col s12" id="copyAddressButton"><i class="material-icons left">content_copy</i>Copy wallet address</button>
+					<button class="waves-effect waves-light btn col s12 red" id="unloadWalletButton"><i class="material-icons left">clear</i>Unload wallet</button>
+				</div>
+				<div style='width: 100%'>
+					<br/>
+				</div>
+			</div>
+			<div style='width: 100%'>
+				<br/>
+			</div>
 			<ul class="collapsible">
 				<li class="hideInReadOnly">
 					<div class="collapsible-header">
-						<h6>Send bEUBI tokens</h6>
-					</div>
-					<div class="collapsible-body row">
-						<div class="input-field col s12" id="hideApprovalOwner" style="display: none;">
-							<i class="material-icons prefix">vpn_key</i>
-							<input id="approvalOwner" type="text"/>
-							<label for="approvalOwner">Owner's address</label>
-						</div>
-						<div class="input-field col s12">
-							<i class="material-icons prefix">vpn_key</i>
-							<input id="sendto" type="text"/>
-							<label for="sendto">Receiver's address</label>
-						</div>
-						<div class="input-field col s12">
-							<i class="material-icons prefix">attach_money</i>
-							<input id="eubiamount" type="text"/>
-							<label for="eubiamount">Amount</label>
-						</div>
-						<label class="col s12">
-							<input type="checkbox" id="useApprovalCheckbox"/>
-							<span style="color: black;">
-								<h6>Spend using approval</h6>
-							</span>
-						</label>
-						<button class="waves-effect waves-light btn col s12 m12 l6" id="sendEubiButton"><i class="material-icons left">send</i>Send</button>
-						<button class="waves-effect waves-light btn col s12 m12 l6" id="approveEubiButton"><i class="material-icons left">check</i>Set approval</button>
-						<button class="waves-effect waves-light btn col s12 m12 l6"><i class="material-icons left">search</i>Query approval</button>
-					</div>
-				</li>
-				<li class="hideInReadOnly">
-					<div class="collapsible-header">
-						<h6>Send BNB</h6>
+						<h6>Send</h6>
 					</div>
 					<div class="collapsible-body row">
 						<div class="input-field col s12">
 							<i class="material-icons prefix">vpn_key</i>
-							<input id="sendtoNative" type="text"/>
+							<input id="sendtoNative" type="text" autocomplete="no"/>
 							<label for="sendtoNative">Receiver's address</label>
 						</div>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">attach_money</i>
-							<input id="NativeAmount" type="text"/>
+							<input id="NativeAmount" type="text" autocomplete="no"/>
 							<label for="NativeAmount">Amount</label>
 						</div>
-						<button class="waves-effect waves-light btn col s12 m12 l6" id="sendNativeButton"><i class="material-icons left">send</i>Send</button>
+						<div class="input-field col s6 m3 l2">
+							<select id="sendingCryptoSelector">
+								<option value="bnb">BNB</option>
+								<option value="0x27faaa5bd713dcd4258d5c49258fbef45314ae5d">bEUBI</option>
+								<option value="0x17e6d3E7B727b31Ab6eB9B5b0A38f00389589c80">bPRSS</option>
+							</select>
+							<label>Select cryptocurrency</label>
+						</div>
+						<div class="col s12 row">
+							<button class="waves-effect waves-light btn col s12 m12 l6" id="sendNativeButton"><i class="material-icons left">send</i>Send</button>
+						</div>
 					</div>
 				</li>
 				<li id="BrowserStoredWallet" class="hideInReadOnly">
@@ -152,26 +154,10 @@
 						</div>
 						<div class="input-field col s12">
 							<i class="material-icons prefix">create</i>
-							<input id="storedWalletName" type="text"/>
+							<input id="storedWalletName" type="text" autocomplete="no"/>
 							<label for="storedWalletName">Give the wallet a name</label>
 						</div>
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="AddQuickWalletAccess"><i class="material-icons left">lock</i>Encrypt and store</button>
-					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<h6>Wallet details</h6>
-					</div>
-					<div class="collapsible-body row">
-						<h6 id="myWalletAddress"></h6>
-						<h6 id="eubiBalance">Fetching bEUBI balance...</h6>
-						<h6 id="prssBalance">Fetching bPRSS balance...</h6>
-						<h6 id="nativeBalance">Fetching BNB balance...</h6>
-						<h6>You need approximately 0.00019 BNB to pay for gas costs for a token transfer.</h6>
-						<button class="waves-effect waves-light btn col s12 m12 l6" id="reloadWalletButton"><i class="material-icons left">refresh</i>Reload wallet</button>
-						<button class="waves-effect waves-light btn col s12 m12 l6 hideInReadOnly" id="epkb"><i class="material-icons left">content_copy</i>Copy private key</button>
-						<button class="waves-effect waves-light btn col s12 m12 l6" id="copyAddressButton"><i class="material-icons left">content_copy</i>Copy wallet address</button>
-						<button class="waves-effect waves-light btn col s12 m12 l6 red" id="unloadWalletButton"><i class="material-icons left">clear</i>Unload wallet</button>
 					</div>
 				</li>
 				<li>
@@ -186,7 +172,8 @@
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="nextTransactionHistoryButton"><i class="material-icons left">skip_next</i>next</button>
 					</div>
 				</li>
-				<li id="PancakeSwap" class="hideInReadOnly">
+				<!-- Not ready yet -->
+				<li id="PancakeSwap" style="display: none;">
 					<div class="collapsible-header">
 						<h6>PancakeSwap</h6>
 					</div>
@@ -205,7 +192,7 @@
 						<div id='pancake_ex'>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">attach_money</i>
-								<input id="PancakeAmount" type="text"/>
+								<input id="PancakeAmount" type="text" autocomplete="no"/>
 								<label for="PancakeAmount">Amount</label>
 							</div>
 							<form>
@@ -244,12 +231,12 @@
 						<div id='pancake_liquidity'>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">attach_money</i>
-								<input id="LiquidityToken0" type="text"/>
+								<input id="LiquidityToken0" type="text" autocomplete="no"/>
 								<label for="LiquidityToken0">First token amount</label>
 							</div>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">attach_money</i>
-								<input id="LiquidityToken1" type="text"/>
+								<input id="LiquidityToken1" type="text" autocomplete="no"/>
 								<label for="LiquidityToken1">Second token amount</label>
 							</div>
 							<form>
@@ -272,7 +259,7 @@
 							<h6>We used a liquidity buyback incentive model, where you can permanently lock BNB-bEUBI liquidity tokens now, in exchange for heavily discounted bEUBI tokens in the future. The discount is 0.2%/day from the time you burn your liquidity to the time you claim the bEUBI.</h6>
 							<div class="input-field col s12">
 								<i class="material-icons prefix">attach_money</i>
-								<input id="LiquidityToken2" type="text"/>
+								<input id="LiquidityToken2" type="text" autocomplete="no"/>
 								<label for="LiquidityToken2">Liquidity token amount</label>
 							</div>
 							<button class="waves-effect waves-light btn col s12 m12 l6" id="ApproveRaceTrackLiquidityButton"><i class="material-icons left">check</i>Approve liquidity</button>
@@ -382,13 +369,13 @@
 				<h6>Are you sure you want to send bEUBI?</h6>
 			</div>
 			<div class="modal-footer">
-				<a href="#!" class="modal-close waves-effect waves-light btn-flat green">Yes</a>
+				<a href="#!" class="modal-close waves-effect waves-light btn-flat green" id="sendEubiButton2">Yes</a>
 				<a href="#!" class="modal-close waves-effect waves-light btn-flat red">No</a>
 			</div>
 		</div>
 		<div id="NativeSendModal" class="modal">
 			<div class="modal-content">
-				<h6>Are you sure you want to send BNB?</h6>
+				<h6>Are you sure you want to send cryptocurrencies?</h6>
 			</div>
 			<div class="modal-footer">
 				<a href="#!" class="modal-close waves-effect waves-light btn-flat green" id="sendNativeButton2">Yes</a>
