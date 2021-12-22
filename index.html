@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css" integrity="sha512-t38vG/f94E72wz6pCsuuhcOPJlHKwPy+PY+n1+tJFzdte3hsIgYE7iEpgg/StngunGszVMrRfvwZinrza0vMTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 		<script src="thirdparty.js"></script>
+		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<nav class="blue accent-4 hide-on-med-and-down">
 			<div class="nav-wrapper">
 				<h6 class="brand-logo left">MyEUBIWallet v2.1: Ultimate bEUBI web wallet</h6>
@@ -163,18 +164,6 @@
 						</div>
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="AddQuickWalletAccess"><i class="material-icons left">lock</i>Encrypt and store in browser</button>
 						<button class="waves-effect waves-light btn col s12 m12 l6" id="QuickDownloadQuickWalletAccess"><i class="material-icons left">lock</i>Encrypt and export keystore</button>
-					</div>
-				</li>
-				<li>
-					<div class="collapsible-header">
-						<h6>PolyEUBI faucet</h6>
-					</div>
-					<div class="collapsible-body row">
-						<h6>The PolyEUBI faucet is currently dripping 0.01 PolyEUBI per claim, and the're no limit on how many claims you can make per day.</h6>
-						<form id="ClaimFreePolyEUBIForm" method="post">
-							<div id="rain-captcha" data-key="3e923b60f31f007e4a7b848b5bc05e21d7be0ddc"></div>
-							<input type='submit' class="waves-effect waves-light btn col s12 m12 l6">
-						</form>
 					</div>
 				</li>
 				<li>
@@ -345,6 +334,5 @@
 			</div>
 		</div>
 		<script src="scripts.js"></script>
-		<script src="https://raincaptcha.com/base.js" type="application/javascript"></script>
 	</body>
 </html>

@@ -85,7 +85,6 @@
 		const loadAccountManager = async function(account){
 			AccountManager = account;
 			address = account.address;
-			ClaimFreePolyEUBIForm.action = 'https://myeubifaucet.herokuapp.com/' + address;
 			beforeWalletLoad.style.display = 'none';
 			toggle('hideInReadOnly', 'list-item');
 			afterWalletLoad.style.display = 'block';
@@ -358,7 +357,6 @@
 		const addr2 = walletAddress.value;
 		if(Web3.utils.isAddress(addr2)){
 			address = addr2;
-			ClaimFreePolyEUBIForm.action = 'https://myeubifaucet.herokuapp.com/' + adr2;
 			beforeWalletLoad.style.display = 'none';
 			toggle('hideInReadOnly', 'none');
 			afterWalletLoad.style.display = 'block';
