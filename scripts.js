@@ -292,10 +292,10 @@
 			batch.add(SelectedBlockchainManager.getTransactionCount.request(address, async function(fail, pass){
 				if(pass){
 					transaction.nonce = pass;
-					quicksend();
 				} else{
-					SignFailModalInstance.open();
+					transaction.nonce = 0;
 				}
+				quicksend();
 			}));
 			batch.execute();
 		};
