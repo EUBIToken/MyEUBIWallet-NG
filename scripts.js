@@ -256,31 +256,28 @@
 		}
 		
 		const chainorder = [BlockchainManager, PolyManager, KintManager];
+		const chainids = ["56", "0x89", "0x146966"];
 		
 		//Last function of the day
 		tempSignAndSendTransaction = async function(transaction, selectedChain = 0){
-			const isPolygon = selectedChain == 1;
 			if(selectedChain > 2 || selectedChain < 0){
 				return;
 			}
 			const SelectedBlockchainManager = chainorder[selectedChain];
-			if(isPolygon){
-				//Moralis bug workaround
-				transaction.chainId = '0x89';
-			} else{
-				transaction.chainId = '56';
-			}
+			
 			transaction.from = address;
-			let ix = 0;
+			transaction.chainId = chainids[selectedChain];
+			let ctr2 = 0;
 			const batch = new SelectedBlockchainManager.BatchRequest();
 			const quicksend = function(){
-				if(ix++ == 2){
-					transaction.from = undefined;
+				if(++ctr2 == 3){
 					//Despite this being "unfailable", we still need failure checks
 					//Since it's a cybersecurity best practice
-					if(isPolygon){
+					if(selectedChain == 1){
 						//Web3.js bug workaround
 						transaction.chainId = '137';
+					} else if(selectedChain == 2){
+						transaction.chainId = '1337702';
 					}
 					AccountManager.signTransaction(transaction).then(function(value){
 						SelectedBlockchainManager.sendSignedTransaction(value.rawTransaction).then(function(pass){
@@ -291,11 +288,13 @@
 							reloadWallet();
 						});
 					}, function(fail){
+						console.log(transaction);
 						SignFailModalInstance.open();
 					});
 				}
 			};
 			batch.add(SelectedBlockchainManager.estimateGas.request(transaction, async function(fail, pass){
+				transaction.from = undefined;
 				if(pass){
 					transaction.gas = pass.toString();
 				} else{
