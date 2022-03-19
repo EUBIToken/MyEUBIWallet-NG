@@ -24,14 +24,12 @@
 	//Blockchain Managers
 	const BlockchainManager = new Web3.modules.Eth('https://speedy-nodes-nyc.moralis.io/41590f438df3f8018a1e84b1/bsc/mainnet');
 	const PolyManager = new Web3.modules.Eth('https://polygon-rpc.com');
-	const KintManager = new Web3.modules.Eth('https://rpc.kintsugi.themerge.dev');
 	
 	//Token managers
 	let erc20 = [{"inputs": [{"internalType": "address","name": "owner","type": "address"},{"internalType": "address","name": "spender","type": "address"}],"name": "allowance","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "spender","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "approve","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "account","type": "address"}],"name": "balanceOf","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function"},{"inputs": [{"internalType": "address","name": "recipient","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "transfer","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"},{"inputs": [{"internalType": "address","name": "sender","type": "address"},{"internalType": "address","name": "recipient","type": "address"},{"internalType": "uint256","name": "amount","type": "uint256"}],"name": "transferFrom","outputs": [{"internalType": "bool","name": "","type": "bool"}],"stateMutability": "nonpayable","type": "function"}];
 	const bEUBI = new BlockchainManager.Contract(erc20, '0x27faaa5bd713dcd4258d5c49258fbef45314ae5d');
 	const bPRSS = new BlockchainManager.Contract(erc20, '0x17e6d3E7B727b31Ab6eB9B5b0A38f00389589c80');
 	const PolyEUBI = new PolyManager.Contract(erc20, '0x553e77f7f71616382b1545d4457e2c1ee255fa7a');
-	const KintEUBI = new KintManager.Contract(erc20, '0x323D277AbF5225271D08c713E730C435B3A5B9f4');
 	//const bEUBI_LP = new BlockchainManager.Contract(erc20, '0x7700eea0633210437ffcc6b10c02e0515054b08f');
 	erc20 = undefined;
 	
@@ -44,8 +42,6 @@
 		nativeBalance.innerHTML = 'Fetching BNB balance...';
 		polyeubiBalance.innerHTML = 'Fetching PolyEUBI balance...';
 		maticBalance.innerHTML = 'Fetching MATIC balance...';
-		kinteubiBalance.innerHTML = 'Fetching KintEUBI balance...';
-		kintBalance.innerHTML = 'Fetching kethereum balance...';
 		
 		//Batch load balances for Binance Smart Chain
 		let batch = new BlockchainManager.BatchRequest();
@@ -81,18 +77,6 @@
 			}
 		}));
 		updateTokenBalance(polyeubiBalance, PolyEUBI, 'PolyEUBI');
-		batch.execute();
-		
-		//Batch load balances for Kintsugi Testnet
-		batch = new KintManager.BatchRequest();
-		batch.add(KintManager.getBalance.request(address, async function(fail, pass){
-			if(pass){
-				kintBalance.innerHTML = escapeHtml(Web3.utils.fromWei(pass)) + ' kethereum';
-			} else{
-				kintBalance.innerHTML = 'unable to fetch kethereum balance!';
-			}
-		}));
-		updateTokenBalance(kinteubiBalance, KintEUBI, 'KintEUBI');
 		batch.execute();
 	};
 	let tempSignAndSendTransaction = undefined;
@@ -255,7 +239,7 @@
 			reloadQuickWalletAccess();
 		}
 		
-		const chainorder = [BlockchainManager, PolyManager, KintManager];
+		const chainorder = [BlockchainManager, PolyManager, undefined];
 		const chainids = ["56", "0x89", "0x146966"];
 		
 		//Last function of the day
@@ -361,10 +345,6 @@
 					case 'matic':
 					case '0x553e77f7f71616382b1545d4457e2c1ee255fa7a':
 						chainselector = 1; //Polygon tokens
-						break;
-					case 'kethereum':
-					case '0x323D277AbF5225271D08c713E730C435B3A5B9f4':
-						chainselector = 2; //Kintsugi testnet tokens
 						break;
 						
 				}
